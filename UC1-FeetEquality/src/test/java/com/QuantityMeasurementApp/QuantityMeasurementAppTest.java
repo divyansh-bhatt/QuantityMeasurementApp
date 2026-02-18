@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
-class QuantityMeasurementAppTest {
+public class QuantityMeasurementAppTest {
 
     @org.junit.Test
     void testEquality_SameValue() {
