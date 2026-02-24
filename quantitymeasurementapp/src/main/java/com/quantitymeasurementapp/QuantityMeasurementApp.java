@@ -2,16 +2,38 @@ package com.quantitymeasurementapp;
 
 public class QuantityMeasurementApp {
 
-    public static void main(String[] args) {
+    public static double convert(double value,
+                                 LengthUnit source,
+                                 LengthUnit target) {
 
-        QuantityLength q1 = new QuantityLength(1.0, LengthUnit.FEET);
-        QuantityLength q2 = new QuantityLength(12.0, LengthUnit.INCH);
+        if (!Double.isFinite(value))
+            throw new IllegalArgumentException("Invalid value");
 
-        System.out.println("1 foot == 12 inches : " + q1.equals(q2));
+        if (source == null || target == null)
+            throw new IllegalArgumentException("Unit cannot be null");
 
-        QuantityLength q3 = new QuantityLength(1.0, LengthUnit.INCH);
-        QuantityLength q4 = new QuantityLength(1.0, LengthUnit.INCH);
+        double base = source.toFeet(value);
+        return target.fromFeet(base);
+    }
 
-        System.out.println("1 inch == 1 inch : " + q3.equals(q4));
+    public static void demonstrateLengthConversion(double value,
+                                                   LengthUnit from,
+                                                   LengthUnit to) {
+
+        double result = convert(value, from, to);
+        System.out.println("convert(" + value + ", " + from + ", " + to + ") = " + result);
+    }
+
+    public static void demonstrateLengthConversion(QuantityLength length,
+                                                   LengthUnit to) {
+
+        QuantityLength converted = length.convertTo(to);
+        System.out.println(length + " -> " + converted);
+    }
+
+    public static void demonstrateLengthEquality(QuantityLength l1,
+                                                 QuantityLength l2) {
+
+        System.out.println(l1 + " == " + l2 + " ? " + l1.equals(l2));
     }
 }
