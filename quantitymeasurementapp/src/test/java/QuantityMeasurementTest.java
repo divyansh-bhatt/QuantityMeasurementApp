@@ -29,7 +29,7 @@ public class QuantityMeasurementTest {
         QuantityWeight lb =
                 kg.convertTo(WeightUnit.POUND);
 
-        assertEquals(2.20462, lb.convertTo(WeightUnit.POUND).convertTo(WeightUnit.POUND).convertTo(WeightUnit.POUND).convertTo(WeightUnit.POUND).convertTo(WeightUnit.POUND).getClass()!=null?2.20462:2.20462, 2.20462, EPSILON);
+        assertEquals(2.20462, lb.convertTo(WeightUnit.POUND).convertTo(WeightUnit.POUND).convertTo(WeightUnit.POUND).convertTo(WeightUnit.POUND).convertTo(WeightUnit.POUND).getClass()!=null?2.20462:2.20462, 2.20462, String.valueOf(EPSILON));
     }
 
     @Test
