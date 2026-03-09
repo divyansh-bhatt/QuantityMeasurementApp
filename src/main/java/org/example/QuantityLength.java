@@ -30,10 +30,22 @@ public final class QuantityLength {
         if (targetUnit == null)
             throw new IllegalArgumentException("Target unit cannot be null");
 
-        double baseValue = toBaseUnit();
-        double converted = targetUnit.fromFeet(baseValue);
+        double base = toBaseUnit();
+        double converted = targetUnit.fromFeet(base);
 
         return new QuantityLength(converted, targetUnit);
+    }
+
+    public QuantityLength add(QuantityLength other) {
+
+        if (other == null)
+            throw new IllegalArgumentException("Second operand cannot be null");
+
+        double baseSum = this.toBaseUnit() + other.toBaseUnit();
+
+        double result = this.unit.fromFeet(baseSum);
+
+        return new QuantityLength(result, this.unit);
     }
 
     public double getValue() {
@@ -61,6 +73,6 @@ public final class QuantityLength {
 
     @Override
     public String toString() {
-        return value + " " + unit;
+        return "Quantity(" + value + ", " + unit + ")";
     }
 }
