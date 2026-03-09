@@ -3,15 +3,38 @@ package java.org.example;
 import java.util.Objects;
 
 public class QuantityMeasurementApp {
-    public static void main(String[] args) {
+    public static double convert(double value,
+                                 LengthUnit source,
+                                 LengthUnit target) {
 
-        System.out.println(new QuantityLength(1, LengthUnit.YARD)
-                .equals(new QuantityLength(3, LengthUnit.FEET)));
+        if (!Double.isFinite(value))
+            throw new IllegalArgumentException("Invalid value");
 
-        System.out.println(new QuantityLength(1, LengthUnit.YARD)
-                .equals(new QuantityLength(36, LengthUnit.INCH)));
+        if (source == null || target == null)
+            throw new IllegalArgumentException("Unit cannot be null");
 
-        System.out.println(new QuantityLength(1, LengthUnit.CENTIMETER)
-                .equals(new QuantityLength(0.393701, LengthUnit.INCH)));
+        double base = source.toFeet(value);
+        return target.fromFeet(base);
+    }
+
+    public static void demonstrateLengthConversion(double value,
+                                                   LengthUnit from,
+                                                   LengthUnit to) {
+
+        double result = convert(value, from, to);
+        System.out.println("convert(" + value + ", " + from + ", " + to + ") = " + result);
+    }
+
+    public static void demonstrateLengthConversion(QuantityLength length,
+                                                   LengthUnit to) {
+
+        QuantityLength converted = length.convertTo(to);
+        System.out.println(length + " -> " + converted);
+    }
+
+    public static void demonstrateLengthEquality(QuantityLength l1,
+                                                 QuantityLength l2) {
+
+        System.out.println(l1 + " == " + l2 + " ? " + l1.equals(l2));
     }
 }
