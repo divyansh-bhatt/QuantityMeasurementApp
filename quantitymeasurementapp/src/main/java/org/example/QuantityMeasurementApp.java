@@ -3,25 +3,16 @@ package java.org.example;
 import java.util.Objects;
 
 public class QuantityMeasurementApp {
-        public static boolean checkFeetEquality(double a, double b) {
-            Feet feet1 = new Feet(a);
-            Feet feet2 = new Feet(b);
-            return feet1.equals(feet2);
-        }
+    public static void main(String[] args) {
 
-        public static boolean checkInchesEquality(double a, double b) {
-            Inches inch1 = new Inches(a);
-            Inches inch2 = new Inches(b);
-            return inch1.equals(inch2);
-        }
+        QuantityLength q1 = new QuantityLength(1.0, LengthUnit.FEET);
+        QuantityLength q2 = new QuantityLength(12.0, LengthUnit.INCH);
 
-        public static void main(String[] args) {
+        System.out.println("1 foot == 12 inches : " + q1.equals(q2));
 
-            System.out.println("Input: 1.0 inch and 1.0 inch");
-            System.out.println("Output: Equal (" + checkInchesEquality(1.0, 1.0) + ")");
+        QuantityLength q3 = new QuantityLength(1.0, LengthUnit.INCH);
+        QuantityLength q4 = new QuantityLength(1.0, LengthUnit.INCH);
 
-            System.out.println("Input: 1.0 ft and 1.0 ft");
-            System.out.println("Output: Equal (" + checkFeetEquality(1.0, 1.0) + ")");
-        }
+        System.out.println("1 inch == 1 inch : " + q3.equals(q4));
     }
 }
