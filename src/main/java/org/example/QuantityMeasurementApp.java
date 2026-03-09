@@ -5,16 +5,21 @@ import java.util.Objects;
 public class QuantityMeasurementApp {
     public static void main(String[] args) {
 
-        QuantityLength q1 = new QuantityLength(1.0, LengthUnit.FEET);
-        QuantityLength q2 = new QuantityLength(12.0, LengthUnit.INCHES);
+        QuantityWeight w1 =
+                new QuantityWeight(1.0, WeightUnit.KILOGRAM);
 
-        System.out.println(q1.convertTo(LengthUnit.INCHES));
+        QuantityWeight w2 =
+                new QuantityWeight(1000.0, WeightUnit.GRAM);
 
-        System.out.println(q1.add(q2, LengthUnit.FEET));
+        System.out.println(w1.equals(w2));
+
+        System.out.println(w1.convertTo(WeightUnit.GRAM));
+
+        System.out.println(w1.add(w2));
 
         System.out.println(
-                new QuantityLength(36.0, LengthUnit.INCHES)
-                        .equals(new QuantityLength(1.0, LengthUnit.YARDS))
+                new QuantityWeight(2.0, WeightUnit.POUND)
+                        .convertTo(WeightUnit.KILOGRAM)
         );
     }
 }

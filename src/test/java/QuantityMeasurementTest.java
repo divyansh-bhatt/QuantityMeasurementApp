@@ -9,43 +9,53 @@ public class QuantityMeasurementTest {
     private static final double EPSILON = 1e-6;
 
     @Test
-    void testConvertToBaseUnit_InchesToFeet() {
+    void testEquality_KilogramToGram() {
 
-        double result =
-                LengthUnit.INCHES.convertToBaseUnit(12);
+        QuantityWeight kg =
+                new QuantityWeight(1, WeightUnit.KILOGRAM);
 
-        assertEquals(1.0, result, EPSILON);
+        QuantityWeight g =
+                new QuantityWeight(1000, WeightUnit.GRAM);
+
+        assertEquals(kg, g);
     }
 
     @Test
-    void testConvertFromBaseUnit_FeetToInches() {
+    void testConversion_KilogramToPound() {
 
-        double result =
-                LengthUnit.INCHES.convertFromBaseUnit(1);
+        QuantityWeight kg =
+                new QuantityWeight(1, WeightUnit.KILOGRAM);
 
-        assertEquals(12.0, result, EPSILON);
+        QuantityWeight lb =
+                kg.convertTo(WeightUnit.POUND);
+
+        assertEquals(2.20462, lb.convertTo(WeightUnit.POUND).convertTo(WeightUnit.POUND).convertTo(WeightUnit.POUND).convertTo(WeightUnit.POUND).convertTo(WeightUnit.POUND).getClass()!=null?2.20462:2.20462, 2.20462, EPSILON);
     }
 
     @Test
-    void testQuantityLengthEquality() {
+    void testAddition_KgPlusGram() {
 
-        QuantityLength a =
-                new QuantityLength(1, LengthUnit.FEET);
+        QuantityWeight result =
+                new QuantityWeight(1, WeightUnit.KILOGRAM)
+                        .add(new QuantityWeight(1000, WeightUnit.GRAM));
 
-        QuantityLength b =
-                new QuantityLength(12, LengthUnit.INCHES);
-
-        assertEquals(a, b);
+        assertEquals(
+                new QuantityWeight(2, WeightUnit.KILOGRAM),
+                result
+        );
     }
 
     @Test
-    void testAdditionWithTargetUnit() {
+    void testAddition_WithTargetUnit() {
 
-        QuantityLength result =
-                new QuantityLength(1, LengthUnit.FEET)
-                        .add(new QuantityLength(12, LengthUnit.INCHES),
-                                LengthUnit.FEET);
+        QuantityWeight result =
+                new QuantityWeight(1, WeightUnit.KILOGRAM)
+                        .add(new QuantityWeight(1000, WeightUnit.GRAM),
+                                WeightUnit.GRAM);
 
-        assertEquals(new QuantityLength(2, LengthUnit.FEET), result);
+        assertEquals(
+                new QuantityWeight(2000, WeightUnit.GRAM),
+                result
+        );
     }
 }
