@@ -9,63 +9,59 @@ public class QuantityMeasurementTest {
     private static final double EPSILON = 1e-6;
 
     @Test
-    void testConversion_FeetToInches() {
-        assertEquals(12.0,
-                QuantityMeasurementApp.convert(1.0, LengthUnit.FEET, LengthUnit.INCHES),
-                EPSILON);
+    void testAddition_SameUnit_FeetPlusFeet() {
+
+        QuantityLength result =
+                new QuantityLength(1.0, LengthUnit.FEET)
+                        .add(new QuantityLength(2.0, LengthUnit.FEET));
+
+        assertEquals(new QuantityLength(3.0, LengthUnit.FEET), result);
     }
 
     @Test
-    void testConversion_YardsToInches() {
-        assertEquals(36.0,
-                QuantityMeasurementApp.convert(1.0, LengthUnit.YARDS, LengthUnit.INCHES),
-                EPSILON);
+    void testAddition_SameUnit_InchPlusInch() {
+
+        QuantityLength result =
+                new QuantityLength(6.0, LengthUnit.INCHES)
+                        .add(new QuantityLength(6.0, LengthUnit.INCHES));
+
+        assertEquals(new QuantityLength(12.0, LengthUnit.INCHES), result);
     }
 
     @Test
-    void testConversion_CentimetersToInches() {
-        assertEquals(1.0,
-                QuantityMeasurementApp.convert(2.54, LengthUnit.CENTIMETERS, LengthUnit.INCHES),
-                EPSILON);
+    void testAddition_CrossUnit_FeetPlusInches() {
+
+        QuantityLength result =
+                new QuantityLength(1.0, LengthUnit.FEET)
+                        .add(new QuantityLength(12.0, LengthUnit.INCHES));
+
+        assertEquals(new QuantityLength(2.0, LengthUnit.FEET), result);
     }
 
     @Test
-    void testConversion_RoundTrip() {
+    void testAddition_CrossUnit_InchPlusFeet() {
 
-        double original = 5.0;
+        QuantityLength result =
+                new QuantityLength(12.0, LengthUnit.INCHES)
+                        .add(new QuantityLength(1.0, LengthUnit.FEET));
 
-        double converted =
-                QuantityMeasurementApp.convert(original, LengthUnit.FEET, LengthUnit.INCHES);
-
-        double roundTrip =
-                QuantityMeasurementApp.convert(converted, LengthUnit.INCHES, LengthUnit.FEET);
-
-        assertEquals(original, roundTrip, EPSILON);
+        assertEquals(new QuantityLength(24.0, LengthUnit.INCHES), result);
     }
 
     @Test
-    void testConversion_ZeroValue() {
-        assertEquals(0.0,
-                QuantityMeasurementApp.convert(0.0, LengthUnit.FEET, LengthUnit.INCHES),
-                EPSILON);
+    void testAddition_WithZero() {
+
+        QuantityLength result =
+                new QuantityLength(5.0, LengthUnit.FEET)
+                        .add(new QuantityLength(0.0, LengthUnit.INCHES));
+
+        assertEquals(new QuantityLength(5.0, LengthUnit.FEET), result);
     }
 
     @Test
-    void testConversion_NegativeValue() {
-        assertEquals(-12.0,
-                QuantityMeasurementApp.convert(-1.0, LengthUnit.FEET, LengthUnit.INCHES),
-                EPSILON);
-    }
+    void testAddition_NullSecondOperand() {
 
-    @Test
-    void testConversion_InvalidUnit_Throws() {
         assertThrows(IllegalArgumentException.class,
-                () -> QuantityMeasurementApp.convert(1.0, null, LengthUnit.FEET));
-    }
-
-    @Test
-    void testConversion_NaN_Throws() {
-        assertThrows(IllegalArgumentException.class,
-                () -> QuantityMeasurementApp.convert(Double.NaN, LengthUnit.FEET, LengthUnit.INCHES));
+                () -> new QuantityLength(1.0, LengthUnit.FEET).add(null));
     }
 }

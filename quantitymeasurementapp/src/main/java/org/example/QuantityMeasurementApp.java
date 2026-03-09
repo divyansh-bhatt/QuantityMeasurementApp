@@ -3,38 +3,19 @@ package java.org.example;
 import java.util.Objects;
 
 public class QuantityMeasurementApp {
-    public static double convert(double value,
-                                 LengthUnit source,
-                                 LengthUnit target) {
+    public static void demonstrateAddition(QuantityLength l1,
+                                           QuantityLength l2) {
 
-        if (!Double.isFinite(value))
-            throw new IllegalArgumentException("Invalid value");
+        QuantityLength result = l1.add(l2);
 
-        if (source == null || target == null)
-            throw new IllegalArgumentException("Unit cannot be null");
-
-        double base = source.toFeet(value);
-        return target.fromFeet(base);
+        System.out.println("add(" + l1 + ", " + l2 + ") = " + result);
     }
 
-    public static void demonstrateLengthConversion(double value,
-                                                   LengthUnit from,
-                                                   LengthUnit to) {
+    public static void main(String[] args) {
 
-        double result = convert(value, from, to);
-        System.out.println("convert(" + value + ", " + from + ", " + to + ") = " + result);
-    }
+        QuantityLength a = new QuantityLength(1.0, LengthUnit.FEET);
+        QuantityLength b = new QuantityLength(12.0, LengthUnit.INCHES);
 
-    public static void demonstrateLengthConversion(QuantityLength length,
-                                                   LengthUnit to) {
-
-        QuantityLength converted = length.convertTo(to);
-        System.out.println(length + " -> " + converted);
-    }
-
-    public static void demonstrateLengthEquality(QuantityLength l1,
-                                                 QuantityLength l2) {
-
-        System.out.println(l1 + " == " + l2 + " ? " + l1.equals(l2));
+        demonstrateAddition(a, b);
     }
 }
