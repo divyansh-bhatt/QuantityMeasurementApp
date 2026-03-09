@@ -2,21 +2,23 @@ package java.org.example;
 
 import java.util.Objects;
 
-public class QuantityLength {
+public final class QuantityLength {
+
+    private static final double EPSILON = 1e-6;
 
     private final double value;
     private final LengthUnit unit;
 
     public QuantityLength(double value, LengthUnit unit) {
 
-        if (unit == null)
-            throw new IllegalArgumentException("Unit cannot be null");
+        if (!Double.isFinite(value))
+            throw new IllegalArgumentException("Invalid numeric value");
 
+        this.unit = Objects.requireNonNull(unit, "Unit cannot be null");
         this.value = value;
-        this.unit = unit;
     }
 
-    public double toBaseUnit() {
+    private double toBaseUnit() {
         return unit.toFeet(value);
     }
 
@@ -31,11 +33,19 @@ public class QuantityLength {
 
         QuantityLength other = (QuantityLength) obj;
 
-        return Double.compare(this.toBaseUnit(), other.toBaseUnit()) == 0;
+        double thisFeet = this.toBaseUnit();
+        double otherFeet = other.toBaseUnit();
+
+        return Math.abs(thisFeet - otherFeet) < EPSILON;
     }
 
     @Override
     public int hashCode() {
-        return Double.hashCode(toBaseUnit());
+        return Objects.hash(toBaseUnit());
+    }
+
+    @Override
+    public String toString() {
+        return "Quantity(" + value + ", " + unit + ")";
     }
 }
