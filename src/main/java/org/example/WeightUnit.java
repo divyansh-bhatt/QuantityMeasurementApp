@@ -1,26 +1,24 @@
 package java.org.example;
 
-public enum WeightUnit {
+public enum WeightUnit implements IMeasurable {
 
     KILOGRAM(1.0),
     GRAM(0.001),
     POUND(0.453592);
 
-    private final double conversionFactorToKg;
+    private final double factor;
 
     WeightUnit(double factor) {
-        this.conversionFactorToKg = factor;
+        this.factor = factor;
     }
 
-    public double convertToBaseUnit(double value) {
-        return value * conversionFactorToKg;
-    }
-
-    public double convertFromBaseUnit(double baseValue) {
-        return baseValue / conversionFactorToKg;
-    }
-
+    @Override
     public double getConversionFactor() {
-        return conversionFactorToKg;
+        return factor;
+    }
+
+    @Override
+    public String getUnitName() {
+        return name();
     }
 }
