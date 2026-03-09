@@ -1,7 +1,8 @@
 package java.org.example;
 
 import java.util.Objects;
-
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 public final class QuantityLength {
 
     private static final double EPSILON = 1e-6;
@@ -22,7 +23,7 @@ public final class QuantityLength {
     }
 
     private double toBaseUnit() {
-        return unit.toFeet(value);
+        return unit.convertToBaseUnit(value);
     }
 
     public QuantityLength convertTo(LengthUnit targetUnit) {
@@ -30,8 +31,9 @@ public final class QuantityLength {
         if (targetUnit == null)
             throw new IllegalArgumentException("Target unit cannot be null");
 
-        double base = toBaseUnit();
-        double converted = targetUnit.fromFeet(base);
+        double baseValue = unit.convertToBaseUnit(value);
+
+        double converted = targetUnit.convertFromBaseUnit(baseValue);
 
         return new QuantityLength(converted, targetUnit);
     }
@@ -41,19 +43,30 @@ public final class QuantityLength {
         if (other == null)
             throw new IllegalArgumentException("Second operand cannot be null");
 
-        double baseSum = this.toBaseUnit() + other.toBaseUnit();
+        double baseSum =
+                this.unit.convertToBaseUnit(this.value) +
+                        other.unit.convertToBaseUnit(other.value);
 
-        double result = this.unit.fromFeet(baseSum);
+        double result = this.unit.convertFromBaseUnit(baseSum);
 
         return new QuantityLength(result, this.unit);
     }
 
-    public double getValue() {
-        return value;
-    }
+    public QuantityLength add(QuantityLength other, LengthUnit targetUnit) {
 
-    public LengthUnit getUnit() {
-        return unit;
+        if (other == null)
+            throw new IllegalArgumentException("Second operand cannot be null");
+
+        if (targetUnit == null)
+            throw new IllegalArgumentException("Target unit cannot be null");
+
+        double baseSum =
+                this.unit.convertToBaseUnit(this.value) +
+                        other.unit.convertToBaseUnit(other.value);
+
+        double result = targetUnit.convertFromBaseUnit(baseSum);
+
+        return new QuantityLength(result, targetUnit);
     }
 
     @Override
@@ -61,9 +74,12 @@ public final class QuantityLength {
 
         if (this == obj) return true;
 
-        if (!(obj instanceof QuantityLength other)) return false;
+        if (!(obj instanceof QuantityLength other))
+            return false;
 
-        return Math.abs(this.toBaseUnit() - other.toBaseUnit()) < EPSILON;
+        return Math.abs(
+                this.toBaseUnit() - other.toBaseUnit()
+        ) < EPSILON;
     }
 
     @Override

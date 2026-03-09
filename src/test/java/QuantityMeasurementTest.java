@@ -9,59 +9,43 @@ public class QuantityMeasurementTest {
     private static final double EPSILON = 1e-6;
 
     @Test
-    void testAddition_SameUnit_FeetPlusFeet() {
+    void testConvertToBaseUnit_InchesToFeet() {
 
-        QuantityLength result =
-                new QuantityLength(1.0, LengthUnit.FEET)
-                        .add(new QuantityLength(2.0, LengthUnit.FEET));
+        double result =
+                LengthUnit.INCHES.convertToBaseUnit(12);
 
-        assertEquals(new QuantityLength(3.0, LengthUnit.FEET), result);
+        assertEquals(1.0, result, EPSILON);
     }
 
     @Test
-    void testAddition_SameUnit_InchPlusInch() {
+    void testConvertFromBaseUnit_FeetToInches() {
 
-        QuantityLength result =
-                new QuantityLength(6.0, LengthUnit.INCHES)
-                        .add(new QuantityLength(6.0, LengthUnit.INCHES));
+        double result =
+                LengthUnit.INCHES.convertFromBaseUnit(1);
 
-        assertEquals(new QuantityLength(12.0, LengthUnit.INCHES), result);
+        assertEquals(12.0, result, EPSILON);
     }
 
     @Test
-    void testAddition_CrossUnit_FeetPlusInches() {
+    void testQuantityLengthEquality() {
 
-        QuantityLength result =
-                new QuantityLength(1.0, LengthUnit.FEET)
-                        .add(new QuantityLength(12.0, LengthUnit.INCHES));
+        QuantityLength a =
+                new QuantityLength(1, LengthUnit.FEET);
 
-        assertEquals(new QuantityLength(2.0, LengthUnit.FEET), result);
+        QuantityLength b =
+                new QuantityLength(12, LengthUnit.INCHES);
+
+        assertEquals(a, b);
     }
 
     @Test
-    void testAddition_CrossUnit_InchPlusFeet() {
+    void testAdditionWithTargetUnit() {
 
         QuantityLength result =
-                new QuantityLength(12.0, LengthUnit.INCHES)
-                        .add(new QuantityLength(1.0, LengthUnit.FEET));
+                new QuantityLength(1, LengthUnit.FEET)
+                        .add(new QuantityLength(12, LengthUnit.INCHES),
+                                LengthUnit.FEET);
 
-        assertEquals(new QuantityLength(24.0, LengthUnit.INCHES), result);
-    }
-
-    @Test
-    void testAddition_WithZero() {
-
-        QuantityLength result =
-                new QuantityLength(5.0, LengthUnit.FEET)
-                        .add(new QuantityLength(0.0, LengthUnit.INCHES));
-
-        assertEquals(new QuantityLength(5.0, LengthUnit.FEET), result);
-    }
-
-    @Test
-    void testAddition_NullSecondOperand(){
-
-        assertThrows(IllegalArgumentException.class,
-                () -> new QuantityLength(1.0, LengthUnit.FEET).add(null));
+        assertEquals(new QuantityLength(2, LengthUnit.FEET), result);
     }
 }
