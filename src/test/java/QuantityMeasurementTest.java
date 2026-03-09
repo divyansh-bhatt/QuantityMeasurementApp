@@ -59,7 +59,7 @@ public class QuantityMeasurementTest {
     }
 
     @Test
-    void testAddition_NullSecondOperand() {
+    void testAddition_NullSecondOperand(){
 
         assertThrows(IllegalArgumentException.class,
                 () -> new QuantityLength(1.0, LengthUnit.FEET).add(null));
