@@ -1,5 +1,5 @@
 package java.org.example;
-
+import java.util.function.DoubleBinaryOperator;
 import java.util.Objects;
 
 public final class Quantity<U extends IMeasurable> {
@@ -21,40 +21,80 @@ public final class Quantity<U extends IMeasurable> {
         this.unit = unit;
     }
 
-    private double toBase() {
-        return unit.convertToBaseUnit(value);
+    private enum ArithmeticOperation {
+
+        ADD((a, b) -> a + b),
+
+        SUBTRACT((a, b) -> a - b),
+
+        DIVIDE((a, b) -> {
+            if (b == 0)
+                throw new ArithmeticException("Division by zero");
+            return a / b;
+        });
+
+        private final DoubleBinaryOperator operator;
+
+        ArithmeticOperation(DoubleBinaryOperator operator) {
+            this.operator = operator;
+        }
+
+        public double compute(double a, double b) {
+            return operator.applyAsDouble(a, b);
+        }
+    }
+
+    private void validateArithmeticOperands(Quantity<U> other) {
+
+        if (other == null)
+            throw new IllegalArgumentException("Operand cannot be null");
+
+        if (!this.unit.getClass().equals(other.unit.getClass()))
+            throw new IllegalArgumentException("Incompatible units");
+
+        if (!Double.isFinite(this.value) || !Double.isFinite(other.value))
+            throw new IllegalArgumentException("Invalid numeric values");
+    }
+
+    private double performBaseArithmetic(Quantity<U> other, ArithmeticOperation operation) {
+
+        validateArithmeticOperands(other);
+
+        double base1 = this.unit.convertToBaseUnit(this.value);
+        double base2 = other.unit.convertToBaseUnit(other.value);
+
+        return operation.compute(base1, base2);
     }
 
     public Quantity<U> convertTo(U targetUnit) {
 
         double base = unit.convertToBaseUnit(value);
+        double result = targetUnit.convertFromBaseUnit(base);
 
-        double converted = targetUnit.convertFromBaseUnit(base);
-
-        return new Quantity<>(converted, targetUnit);
+        return new Quantity<>(result, targetUnit);
     }
 
     public Quantity<U> add(Quantity<U> other) {
 
-        double baseSum = this.toBase() + other.toBase();
+        double base = performBaseArithmetic(other, ArithmeticOperation.ADD);
 
-        double result = unit.convertFromBaseUnit(baseSum);
+        double result = unit.convertFromBaseUnit(base);
 
         return new Quantity<>(result, unit);
     }
 
     public Quantity<U> add(Quantity<U> other, U targetUnit) {
 
-        double baseSum = this.toBase() + other.toBase();
+        double base = performBaseArithmetic(other, ArithmeticOperation.ADD);
 
-        double result = targetUnit.convertFromBaseUnit(baseSum);
+        double result = targetUnit.convertFromBaseUnit(base);
 
         return new Quantity<>(result, targetUnit);
     }
 
     public Quantity<U> subtract(Quantity<U> other) {
 
-        double base = this.toBase() - other.toBase();
+        double base = performBaseArithmetic(other, ArithmeticOperation.SUBTRACT);
 
         double result = unit.convertFromBaseUnit(base);
 
@@ -63,7 +103,7 @@ public final class Quantity<U extends IMeasurable> {
 
     public Quantity<U> subtract(Quantity<U> other, U targetUnit) {
 
-        double base = this.toBase() - other.toBase();
+        double base = performBaseArithmetic(other, ArithmeticOperation.SUBTRACT);
 
         double result = targetUnit.convertFromBaseUnit(base);
 
@@ -72,13 +112,7 @@ public final class Quantity<U extends IMeasurable> {
 
     public double divide(Quantity<U> other) {
 
-        if (other == null)
-            throw new IllegalArgumentException();
-
-        if (other.value == 0)
-            throw new ArithmeticException("Division by zero");
-
-        return this.toBase() / other.toBase();
+        return performBaseArithmetic(other, ArithmeticOperation.DIVIDE);
     }
 
     @Override
@@ -92,16 +126,18 @@ public final class Quantity<U extends IMeasurable> {
         if (!unit.getClass().equals(other.unit.getClass()))
             return false;
 
-        return Math.abs(this.toBase() - other.unit.convertToBaseUnit(other.value)) < EPSILON;
+        double base1 = unit.convertToBaseUnit(value);
+        double base2 = other.unit.convertToBaseUnit(other.value);
+
+        return Math.abs(base1 - base2) < EPSILON;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Math.round(toBase() / EPSILON));
+        return Objects.hash(unit.convertToBaseUnit(value));
     }
 
     @Override
     public String toString() {
         return "Quantity(" + value + ", " + unit.getUnitName() + ")";
     }
-}
