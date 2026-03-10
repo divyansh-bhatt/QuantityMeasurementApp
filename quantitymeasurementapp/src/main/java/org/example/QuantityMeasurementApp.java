@@ -5,21 +5,30 @@ import java.util.Objects;
 public class QuantityMeasurementApp {
     public static void main(String[] args) {
 
-        Quantity<VolumeUnit> v1 =
-                new Quantity<>(1.0, VolumeUnit.LITRE);
+        Quantity<LengthUnit> length1 =
+                new Quantity<>(10.0, LengthUnit.FEET);
 
-        Quantity<VolumeUnit> v2 =
-                new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
+        Quantity<LengthUnit> length2 =
+                new Quantity<>(6.0, LengthUnit.INCHES);
 
-        System.out.println(v1.equals(v2));
+        System.out.println(length1.subtract(length2));
 
-        System.out.println(v1.convertTo(VolumeUnit.MILLILITRE));
+        System.out.println(length1.divide(new Quantity<>(2.0, LengthUnit.FEET)));
 
-        System.out.println(v1.add(v2));
+        Quantity<WeightUnit> weight1 =
+                new Quantity<>(10.0, WeightUnit.KILOGRAM);
 
-        Quantity<VolumeUnit> v3 =
-                new Quantity<>(1.0, VolumeUnit.GALLON);
+        Quantity<WeightUnit> weight2 =
+                new Quantity<>(5000.0, WeightUnit.GRAM);
 
-        System.out.println(v3.convertTo(VolumeUnit.LITRE));
+        System.out.println(weight1.subtract(weight2));
+
+        Quantity<VolumeUnit> volume1 =
+                new Quantity<>(5.0, VolumeUnit.LITRE);
+
+        Quantity<VolumeUnit> volume2 =
+                new Quantity<>(500.0, VolumeUnit.MILLILITRE);
+
+        System.out.println(volume1.subtract(volume2));
     }
 }

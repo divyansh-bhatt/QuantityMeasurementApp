@@ -13,12 +13,10 @@ public enum LengthUnit implements IMeasurable {
         this.factor = factor;
     }
 
-    @Override
     public double getConversionFactor() {
         return factor;
     }
 
-    @Override
     public String getUnitName() {
         return name();
     }

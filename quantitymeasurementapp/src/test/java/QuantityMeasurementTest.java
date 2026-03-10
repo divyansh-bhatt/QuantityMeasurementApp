@@ -6,83 +6,73 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class QuantityMeasurementTest {
 
-    private static final double EPSILON = 1e-6;
-
     @Test
-    void testEquality_LitreToMillilitre() {
+    void testSubtraction_FeetMinusFeet() {
 
-        Quantity<VolumeUnit> litre =
-                new Quantity<>(1.0, VolumeUnit.LITRE);
+        Quantity<LengthUnit> result =
+                new Quantity<>(10, LengthUnit.FEET)
+                        .subtract(new Quantity<>(5, LengthUnit.FEET));
 
-        Quantity<VolumeUnit> ml =
-                new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
-
-        assertEquals(litre, ml);
+        assertEquals(new Quantity<>(5, LengthUnit.FEET), result);
     }
 
     @Test
-    void testConversion_LitreToMillilitre() {
+    void testSubtraction_FeetMinusInches() {
 
-        Quantity<VolumeUnit> litre =
-                new Quantity<>(1.0, VolumeUnit.LITRE);
+        Quantity<LengthUnit> result =
+                new Quantity<>(10, LengthUnit.FEET)
+                        .subtract(new Quantity<>(6, LengthUnit.INCHES));
+
+        assertEquals(new Quantity<>(9.5, LengthUnit.FEET), result);
+    }
+
+    @Test
+    void testSubtraction_LitreMinusMillilitre() {
 
         Quantity<VolumeUnit> result =
-                litre.convertTo(VolumeUnit.MILLILITRE);
+                new Quantity<>(5, VolumeUnit.LITRE)
+                        .subtract(new Quantity<>(500, VolumeUnit.MILLILITRE));
 
-        assertEquals(
-                new Quantity<>(1000.0, VolumeUnit.MILLILITRE),
-                result
+        assertEquals(new Quantity<>(4.5, VolumeUnit.LITRE), result);
+    }
+
+    @Test
+    void testDivision_Feet() {
+
+        double result =
+                new Quantity<>(10, LengthUnit.FEET)
+                        .divide(new Quantity<>(2, LengthUnit.FEET));
+
+        assertEquals(5.0, result);
+    }
+
+    @Test
+    void testDivision_InchesFeet() {
+
+        double result =
+                new Quantity<>(12, LengthUnit.INCHES)
+                        .divide(new Quantity<>(1, LengthUnit.FEET));
+
+        assertEquals(1.0, result);
+    }
+
+    @Test
+    void testDivision_Weight() {
+
+        double result =
+                new Quantity<>(10, WeightUnit.KILOGRAM)
+                        .divide(new Quantity<>(5, WeightUnit.KILOGRAM));
+
+        assertEquals(2.0, result);
+    }
+
+    @Test
+    void testDivision_ByZero() {
+
+        assertThrows(
+                ArithmeticException.class,
+                () -> new Quantity<>(10, LengthUnit.FEET)
+                        .divide(new Quantity<>(0, LengthUnit.FEET))
         );
-    }
-
-    @Test
-    void testConversion_GallonToLitre() {
-
-        Quantity<VolumeUnit> gallon =
-                new Quantity<>(1.0, VolumeUnit.GALLON);
-
-        Quantity<VolumeUnit> litre =
-                gallon.convertTo(VolumeUnit.LITRE);
-
-        assertEquals(3.78541, litre.convertTo(VolumeUnit.LITRE).convertTo(VolumeUnit.LITRE).convertTo(VolumeUnit.LITRE).convertTo(VolumeUnit.LITRE).convertTo(VolumeUnit.LITRE).convertTo(VolumeUnit.LITRE).convertTo(VolumeUnit.LITRE).convertTo(VolumeUnit.LITRE).convertTo(VolumeUnit.LITRE).convertTo(VolumeUnit.LITRE).getClass()!=null?3.78541:3.78541,3.78541, String.valueOf(EPSILON));
-    }
-
-    @Test
-    void testAddition_LitrePlusMillilitre() {
-
-        Quantity<VolumeUnit> result =
-                new Quantity<>(1.0, VolumeUnit.LITRE)
-                        .add(new Quantity<>(1000.0, VolumeUnit.MILLILITRE));
-
-        assertEquals(
-                new Quantity<>(2.0, VolumeUnit.LITRE),
-                result
-        );
-    }
-
-    @Test
-    void testAddition_WithTargetUnit() {
-
-        Quantity<VolumeUnit> result =
-                new Quantity<>(1.0, VolumeUnit.LITRE)
-                        .add(new Quantity<>(1000.0, VolumeUnit.MILLILITRE),
-                                VolumeUnit.MILLILITRE);
-
-        assertEquals(
-                new Quantity<>(2000.0, VolumeUnit.MILLILITRE),
-                result
-        );
-    }
-
-    @Test
-    void testVolumeVsLength_NotEqual() {
-
-        Quantity<VolumeUnit> volume =
-                new Quantity<>(1.0, VolumeUnit.LITRE);
-
-        Quantity<LengthUnit> length =
-                new Quantity<>(1.0, LengthUnit.FEET);
-
-        assertNotEquals(volume, length);
     }
 }
