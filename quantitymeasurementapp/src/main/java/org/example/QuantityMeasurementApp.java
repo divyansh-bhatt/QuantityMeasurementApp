@@ -3,49 +3,23 @@ package java.org.example;
 import java.util.Objects;
 
 public class QuantityMeasurementApp {
-    public static <U extends IMeasurable>
-    void demonstrateEquality(Quantity<U> q1, Quantity<U> q2) {
-
-        System.out.println(q1 + " equals " + q2 + " → " + q1.equals(q2));
-    }
-
-    public static <U extends IMeasurable>
-    void demonstrateConversion(Quantity<U> q, U target) {
-
-        System.out.println(q + " → " + q.convertTo(target));
-    }
-
-    public static <U extends IMeasurable>
-    void demonstrateAddition(Quantity<U> q1, Quantity<U> q2, U target) {
-
-        System.out.println(q1 + " + " + q2 + " → " + q1.add(q2, target));
-    }
-
     public static void main(String[] args) {
 
-        Quantity<LengthUnit> l1 =
-                new Quantity<>(1.0, LengthUnit.FEET);
+        Quantity<VolumeUnit> v1 =
+                new Quantity<>(1.0, VolumeUnit.LITRE);
 
-        Quantity<LengthUnit> l2 =
-                new Quantity<>(12.0, LengthUnit.INCHES);
+        Quantity<VolumeUnit> v2 =
+                new Quantity<>(1000.0, VolumeUnit.MILLILITRE);
 
-        demonstrateEquality(l1, l2);
+        System.out.println(v1.equals(v2));
 
-        demonstrateConversion(l1, LengthUnit.INCHES);
+        System.out.println(v1.convertTo(VolumeUnit.MILLILITRE));
 
-        demonstrateAddition(l1, l2, LengthUnit.FEET);
+        System.out.println(v1.add(v2));
 
+        Quantity<VolumeUnit> v3 =
+                new Quantity<>(1.0, VolumeUnit.GALLON);
 
-        Quantity<WeightUnit> w1 =
-                new Quantity<>(1.0, WeightUnit.KILOGRAM);
-
-        Quantity<WeightUnit> w2 =
-                new Quantity<>(1000.0, WeightUnit.GRAM);
-
-        demonstrateEquality(w1, w2);
-
-        demonstrateConversion(w1, WeightUnit.GRAM);
-
-        demonstrateAddition(w1, w2, WeightUnit.KILOGRAM);
+        System.out.println(v3.convertTo(VolumeUnit.LITRE));
     }
 }
