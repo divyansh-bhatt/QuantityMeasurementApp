@@ -21,14 +21,11 @@ public final class Quantity<U extends IMeasurable> {
         this.unit = unit;
     }
 
-    private double toBaseUnit() {
+    private double toBase() {
         return unit.convertToBaseUnit(value);
     }
 
     public Quantity<U> convertTo(U targetUnit) {
-
-        if (targetUnit == null)
-            throw new IllegalArgumentException("Target unit cannot be null");
 
         double base = unit.convertToBaseUnit(value);
 
@@ -39,24 +36,49 @@ public final class Quantity<U extends IMeasurable> {
 
     public Quantity<U> add(Quantity<U> other) {
 
-        double baseSum =
-                this.unit.convertToBaseUnit(this.value) +
-                        other.unit.convertToBaseUnit(other.value);
+        double baseSum = this.toBase() + other.toBase();
 
-        double result = this.unit.convertFromBaseUnit(baseSum);
+        double result = unit.convertFromBaseUnit(baseSum);
 
-        return new Quantity<>(result, this.unit);
+        return new Quantity<>(result, unit);
     }
 
     public Quantity<U> add(Quantity<U> other, U targetUnit) {
 
-        double baseSum =
-                this.unit.convertToBaseUnit(this.value) +
-                        other.unit.convertToBaseUnit(other.value);
+        double baseSum = this.toBase() + other.toBase();
 
         double result = targetUnit.convertFromBaseUnit(baseSum);
 
         return new Quantity<>(result, targetUnit);
+    }
+
+    public Quantity<U> subtract(Quantity<U> other) {
+
+        double base = this.toBase() - other.toBase();
+
+        double result = unit.convertFromBaseUnit(base);
+
+        return new Quantity<>(result, unit);
+    }
+
+    public Quantity<U> subtract(Quantity<U> other, U targetUnit) {
+
+        double base = this.toBase() - other.toBase();
+
+        double result = targetUnit.convertFromBaseUnit(base);
+
+        return new Quantity<>(result, targetUnit);
+    }
+
+    public double divide(Quantity<U> other) {
+
+        if (other == null)
+            throw new IllegalArgumentException();
+
+        if (other.value == 0)
+            throw new ArithmeticException("Division by zero");
+
+        return this.toBase() / other.toBase();
     }
 
     @Override
@@ -70,14 +92,12 @@ public final class Quantity<U extends IMeasurable> {
         if (!unit.getClass().equals(other.unit.getClass()))
             return false;
 
-        return Math.abs(
-                this.toBaseUnit() - other.unit.convertToBaseUnit(other.value)
-        ) < EPSILON;
+        return Math.abs(this.toBase() - other.unit.convertToBaseUnit(other.value)) < EPSILON;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(Math.round(toBaseUnit() / EPSILON));
+        return Objects.hash(Math.round(toBase() / EPSILON));
     }
 
     @Override
