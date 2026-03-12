@@ -1,30 +1,34 @@
 package java.org.example;
 
+import java.org.example.controller.QuantityMeasurementController;
+import java.org.example.dto.QuantityDTO;
+import java.org.example.repository.QuantityMeasurementCacheRepository;
+import java.org.example.service.QuantityMeasurementServiceImpl;
 import java.util.Objects;
 
 public class QuantityMeasurementApp {
 
     public static void main(String[] args) {
 
-        Quantity<TemperatureUnit> t1 =
-                new Quantity<>(0.0, TemperatureUnit.CELSIUS);
+        // initialize repository
+        QuantityMeasurementCacheRepository repository =
+                QuantityMeasurementCacheRepository.getInstance();
 
-        Quantity<TemperatureUnit> t2 =
-                new Quantity<>(32.0, TemperatureUnit.FAHRENHEIT);
+        // initialize service
+        QuantityMeasurementServiceImpl service =
+                new QuantityMeasurementServiceImpl(repository);
 
-        System.out.println(t1.equals(t2));
+        // initialize controller
+        QuantityMeasurementController controller =
+                new QuantityMeasurementController(service);
 
-        System.out.println(
-                t1.convertTo(TemperatureUnit.FAHRENHEIT));
+        // example quantities
+        QuantityDTO q1 = new QuantityDTO(10, "FEET", "Length");
+        QuantityDTO q2 = new QuantityDTO(6, "INCHES", "Length");
 
-        try {
+        // call controller
+        QuantityDTO result = controller.performAddition(q1, q2);
 
-            t1.add(new Quantity<>(50.0, TemperatureUnit.CELSIUS));
-
-        } catch (UnsupportedOperationException e) {
-
-            System.out.println(e.getMessage());
-
-        }
+        System.out.println("Addition result: " + result);
     }
 }
