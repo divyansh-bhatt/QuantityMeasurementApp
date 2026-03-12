@@ -10,15 +10,46 @@ public interface IMeasurable {
 
     String getUnitName();
 
-    SupportsArithmetic supportsArithmetic = () -> true;
+    // UC14 operation support methods
 
-    default boolean supportsArithmetic() {
-        return supportsArithmetic.isSupported();
+    default boolean supportsAddition() {
+        return true;
+    }
+
+    default boolean supportsSubtraction() {
+        return true;
+    }
+
+    default boolean supportsDivision() {
+        return true;
     }
 
     default void validateOperationSupport(String operation) {
-        if (!supportsArithmetic())
-            throw new UnsupportedOperationException(
-                    getUnitName() + " does not support " + operation);
+        // default allows operation
+    }
+
+    // UC15 helper methods
+
+    String getMeasurementType();
+
+    static IMeasurable getUnitInstance(String unitName) {
+
+        for (LengthUnit u : LengthUnit.values())
+            if (u.name().equalsIgnoreCase(unitName))
+                return u;
+
+        for (WeightUnit u : WeightUnit.values())
+            if (u.name().equalsIgnoreCase(unitName))
+                return u;
+
+        for (VolumeUnit u : VolumeUnit.values())
+            if (u.name().equalsIgnoreCase(unitName))
+                return u;
+
+        for (TemperatureUnit u : TemperatureUnit.values())
+            if (u.name().equalsIgnoreCase(unitName))
+                return u;
+
+        throw new IllegalArgumentException("Invalid unit: " + unitName);
     }
 }
