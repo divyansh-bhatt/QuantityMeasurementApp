@@ -16,6 +16,14 @@ public enum WeightUnit implements IMeasurable {
         return factor;
     }
 
+    public double convertToBaseUnit(double value) {
+        return value * factor;
+    }
+
+    public double convertFromBaseUnit(double baseValue) {
+        return baseValue / factor;
+    }
+
     public String getUnitName() {
         return name();
     }

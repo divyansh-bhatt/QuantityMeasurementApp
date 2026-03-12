@@ -4,13 +4,21 @@ public interface IMeasurable {
 
     double getConversionFactor();
 
-    default double convertToBaseUnit(double value) {
-        return value * getConversionFactor();
-    }
+    double convertToBaseUnit(double value);
 
-    default double convertFromBaseUnit(double baseValue) {
-        return baseValue / getConversionFactor();
-    }
+    double convertFromBaseUnit(double baseValue);
 
     String getUnitName();
+
+    SupportsArithmetic supportsArithmetic = () -> true;
+
+    default boolean supportsArithmetic() {
+        return supportsArithmetic.isSupported();
+    }
+
+    default void validateOperationSupport(String operation) {
+        if (!supportsArithmetic())
+            throw new UnsupportedOperationException(
+                    getUnitName() + " does not support " + operation);
+    }
 }

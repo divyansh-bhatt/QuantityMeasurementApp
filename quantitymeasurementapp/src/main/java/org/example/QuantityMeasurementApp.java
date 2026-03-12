@@ -3,34 +3,28 @@ package java.org.example;
 import java.util.Objects;
 
 public class QuantityMeasurementApp {
+
     public static void main(String[] args) {
 
-        Quantity<LengthUnit> length1 =
-                new Quantity<>(10.0, LengthUnit.FEET);
+        Quantity<TemperatureUnit> t1 =
+                new Quantity<>(0.0, TemperatureUnit.CELSIUS);
 
-        Quantity<LengthUnit> length2 =
-                new Quantity<>(6.0, LengthUnit.INCHES);
+        Quantity<TemperatureUnit> t2 =
+                new Quantity<>(32.0, TemperatureUnit.FAHRENHEIT);
 
-        System.out.println(length1.add(length2));
+        System.out.println(t1.equals(t2));
 
-        System.out.println(length1.subtract(length2));
+        System.out.println(
+                t1.convertTo(TemperatureUnit.FAHRENHEIT));
 
-        System.out.println(length1.divide(new Quantity<>(2.0, LengthUnit.FEET)));
+        try {
 
-        Quantity<WeightUnit> weight1 =
-                new Quantity<>(10.0, WeightUnit.KILOGRAM);
+            t1.add(new Quantity<>(50.0, TemperatureUnit.CELSIUS));
 
-        Quantity<WeightUnit> weight2 =
-                new Quantity<>(5000.0, WeightUnit.GRAM);
+        } catch (UnsupportedOperationException e) {
 
-        System.out.println(weight1.add(weight2));
+            System.out.println(e.getMessage());
 
-        Quantity<VolumeUnit> volume1 =
-                new Quantity<>(5.0, VolumeUnit.LITRE);
-
-        Quantity<VolumeUnit> volume2 =
-                new Quantity<>(500.0, VolumeUnit.MILLILITRE);
-
-        System.out.println(volume1.subtract(volume2));
+        }
     }
 }
