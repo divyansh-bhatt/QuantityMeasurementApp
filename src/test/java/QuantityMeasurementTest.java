@@ -252,5 +252,4 @@ public class QuantityMeasurementTest {
 
         assertThrows(IllegalArgumentException.class,()->a.divide(null));
     }
-
 }
