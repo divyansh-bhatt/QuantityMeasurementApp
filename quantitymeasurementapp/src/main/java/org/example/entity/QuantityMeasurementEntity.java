@@ -1,70 +1,69 @@
-package java.org.example.entity;
+package entity;
 
-import java.io.Serializable;
+import jakarta.persistence.*;
 
-public class QuantityMeasurementEntity implements Serializable {
+@Entity
+@Table(name = "quantity_measurements")
+public class QuantityMeasurementEntity {
 
-    private int id;
-    private double thisValue;
-    private String thisUnit;
-    private String measurementType;
-    private String operation;
-    private String resultString;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    public QuantityMeasurementEntity() {
-    }
+	private String operation;
+	private double operand1;
+	private double operand2;
+	private double result;
 
-    public QuantityMeasurementEntity(String operation, String resultString) {
-        this.operation = operation;
-        this.resultString = resultString;
-    }
+	public QuantityMeasurementEntity() {
+	}
 
-    public int getId() {
-        return id;
-    }
+	public QuantityMeasurementEntity(String operation, double operand1, double operand2, double result) {
+		this.operation = operation;
+		this.operand1 = operand1;
+		this.operand2 = operand2;
+		this.result = result;
+	}
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	// getters & setters
 
+	public String getOperation() {
+		return operation;
+	}
 
-    public double getThisValue() {
-        return thisValue;
-    }
+	public void setOperation(String operation) {
+		this.operation = operation;
+	}
 
-    public void setThisValue(double thisValue) {
-        this.thisValue = thisValue;
-    }
+	public double getOperand1() {
+		return operand1;
+	}
 
-    public String getThisUnit() {
-        return thisUnit;
-    }
+	public void setOperand1(double operand1) {
+		this.operand1 = operand1;
+	}
 
-    public void setThisUnit(String thisUnit) {
-        this.thisUnit = thisUnit;
-    }
+	public double getOperand2() {
+		return operand2;
+	}
 
-    public String getMeasurementType() {
-        return measurementType;
-    }
+	public void setOperand2(double operand2) {
+		this.operand2 = operand2;
+	}
 
-    public void setMeasurementType(String measurementType) {
-        this.measurementType = measurementType;
-    }
+	public double getResult() {
+		return result;
+	}
 
-    public String getOperation() {
-        return operation;
-    }
+	public void setResult(double result) {
+		this.result = result;
+	}
 
-    public void setOperation(String operation) {
-        this.operation = operation;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public String getResultString() {
-        return resultString;
-    }
-
-    public void setResultString(String resultString) {
-        this.resultString = resultString;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 }

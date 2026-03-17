@@ -1,4 +1,4 @@
-package java.org.example.exception;
+package exception;
 
 public class QuantityMeasurementException extends RuntimeException {
 
