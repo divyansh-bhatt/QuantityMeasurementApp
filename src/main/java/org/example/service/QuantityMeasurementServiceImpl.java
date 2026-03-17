@@ -1,92 +1,70 @@
-package java.org.example.service;
+package service;
 
-import java.org.example.dto.QuantityDTO;
-import java.org.example.entity.QuantityMeasurementEntity;
-import java.org.example.repository.IQuantityMeasurementRepository;
+import entity.QuantityMeasurementEntity;
+import repository.QuantityMeasurementRepository;
+import org.springframework.stereotype.Service;
 
-public class QuantityMeasurementServiceImpl
-        implements IQuantityMeasurementService {
+import java.util.List;
 
-    private IQuantityMeasurementRepository repository;
+@Service
+public class QuantityMeasurementServiceImpl {
 
-    public QuantityMeasurementServiceImpl(IQuantityMeasurementRepository repository) {
-        this.repository = repository;
-    }
+	private final QuantityMeasurementRepository repository;
 
-    @Override
-    public boolean compare(QuantityDTO q1, QuantityDTO q2) {
+	public QuantityMeasurementServiceImpl(QuantityMeasurementRepository repository) {
+		this.repository = repository;
+	}
 
-        boolean result = q1.getValue() == q2.getValue();
+	public QuantityMeasurementEntity save(QuantityMeasurementEntity entity) {
 
-        QuantityMeasurementEntity entity = new QuantityMeasurementEntity(
-                "COMPARE",
-                String.valueOf(result)
-        );
+		double op1 = entity.getOperand1();
+		double op2 = entity.getOperand2();
+		String operation = entity.getOperation();
 
-        repository.save(entity);
+		double result = 0;
 
-        return result;
-    }
+		// 🔹 Business Logic
+		switch (operation.toLowerCase()) {
+		case "add":
+			result = op1 + op2;
+			break;
 
-    @Override
-    public QuantityDTO convert(QuantityDTO quantity, String targetUnit) {
+		case "subtract":
+			result = op1 - op2;
+			break;
 
-        QuantityDTO result = new QuantityDTO(
-                quantity.getValue(),
-                targetUnit,
-                quantity.getMeasurementType()
-        );
+		case "multiply":
+			result = op1 * op2;
+			break;
 
-        QuantityMeasurementEntity entity =
-                new QuantityMeasurementEntity("CONVERT", result.toString());
+		case "divide":
+			if (op2 == 0) {
+				throw new ArithmeticException("Cannot divide by zero");
+			}
+			result = op1 / op2;
+			break;
 
-        repository.save(entity);
+		default:
+			throw new IllegalArgumentException("Invalid operation: " + operation);
+		}
 
-        return result;
-    }
+		// Set result in entity
+		entity.setResult(result);
+		return repository.save(entity);
+	}
 
-    @Override
-    public QuantityDTO add(QuantityDTO q1, QuantityDTO q2) {
+	public List<QuantityMeasurementEntity> findAll() {
+		return repository.findAll();
+	}
+	
+	public void deleteById(Long id) {
+	    if (!repository.existsById(id)) {
+	        throw new RuntimeException("Measurement not found with id: " + id);
+	    }
+	    repository.deleteById(id);
+	}
 
-        double value = q1.getValue() + q2.getValue();
-
-        QuantityDTO result =
-                new QuantityDTO(value, q1.getUnit(), q1.getMeasurementType());
-
-        QuantityMeasurementEntity entity =
-                new QuantityMeasurementEntity("ADD", result.toString());
-
-        repository.save(entity);
-
-        return result;
-    }
-
-    @Override
-    public QuantityDTO subtract(QuantityDTO q1, QuantityDTO q2) {
-
-        double value = q1.getValue() - q2.getValue();
-
-        QuantityDTO result =
-                new QuantityDTO(value, q1.getUnit(), q1.getMeasurementType());
-
-        QuantityMeasurementEntity entity =
-                new QuantityMeasurementEntity("SUBTRACT", result.toString());
-
-        repository.save(entity);
-
-        return result;
-    }
-
-    @Override
-    public double divide(QuantityDTO q1, QuantityDTO q2) {
-
-        double result = q1.getValue() / q2.getValue();
-
-        QuantityMeasurementEntity entity =
-                new QuantityMeasurementEntity("DIVIDE", String.valueOf(result));
-
-        repository.save(entity);
-
-        return result;
-    }
+	public void deleteAllMeasurements() {
+		repository.deleteAll();
+	}
 }
