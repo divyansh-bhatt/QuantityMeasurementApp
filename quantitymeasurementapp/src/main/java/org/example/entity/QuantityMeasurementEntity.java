@@ -1,69 +1,52 @@
-package entity;
+package org.example.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "quantity_measurements")
+@Table(name="quantity_measurements")
 public class QuantityMeasurementEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 
+	private String operand1;
+	private String operand2;
 	private String operation;
-	private double operand1;
-	private double operand2;
-	private double result;
+	private String result;
 
-	public QuantityMeasurementEntity() {
+	private LocalDateTime createdAt;
+
+	public QuantityMeasurementEntity(){}
+
+	public QuantityMeasurementEntity(String operand1,String operand2,String operation,String result){
+		this.operand1=operand1;
+		this.operand2=operand2;
+		this.operation=operation;
+		this.result=result;
 	}
 
-	public QuantityMeasurementEntity(String operation, double operand1, double operand2, double result) {
-		this.operation = operation;
-		this.operand1 = operand1;
-		this.operand2 = operand2;
-		this.result = result;
+	@PrePersist
+	public void onCreate(){
+		this.createdAt=LocalDateTime.now();
 	}
 
 	// getters & setters
+	public Long getId(){ return id; }
 
-	public String getOperation() {
-		return operation;
-	}
+	public String getOperand1(){ return operand1; }
+	public void setOperand1(String operand1){ this.operand1=operand1; }
 
-	public void setOperation(String operation) {
-		this.operation = operation;
-	}
+	public String getOperand2(){ return operand2; }
+	public void setOperand2(String operand2){ this.operand2=operand2; }
 
-	public double getOperand1() {
-		return operand1;
-	}
+	public String getOperation(){ return operation; }
+	public void setOperation(String operation){ this.operation=operation; }
 
-	public void setOperand1(double operand1) {
-		this.operand1 = operand1;
-	}
+	public String getResult(){ return result; }
+	public void setResult(String result){ this.result=result; }
 
-	public double getOperand2() {
-		return operand2;
-	}
-
-	public void setOperand2(double operand2) {
-		this.operand2 = operand2;
-	}
-
-	public double getResult() {
-		return result;
-	}
-
-	public void setResult(double result) {
-		this.result = result;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	public LocalDateTime getCreatedAt(){ return createdAt; }
 }

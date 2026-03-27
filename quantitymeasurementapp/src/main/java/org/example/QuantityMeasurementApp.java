@@ -1,5 +1,5 @@
 
-//package com.quantitymeasurement;
+package org.example;
 
 //
 //import com.quantitymeasurement.controller.QuantityMeasurementController;
