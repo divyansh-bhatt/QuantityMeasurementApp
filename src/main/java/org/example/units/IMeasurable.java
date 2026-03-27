@@ -1,14 +1,26 @@
-package units;
+package org.example.units;
+
+@FunctionalInterface
+interface SupportsArithmetic{
+    boolean isSupported();
+}
 
 public interface IMeasurable {
 
-    double convertToBaseUnit(double value);
-
-    double convertFromBaseUnit(double value);
+    SupportsArithmetic supportsArithmetic=()->true;
 
     String getUnitName();
 
     double getConversionFactor();
 
-    boolean supportsArithmetic();
+    double convertToBaseUnit(double value);
+
+    double convertFromBaseUnit(double baseValue);
+
+    default boolean supportsArithmetic(){
+        return supportsArithmetic.isSupported();
+    }
+
+    default void validateOperationSupport(String operation){
+    }
 }

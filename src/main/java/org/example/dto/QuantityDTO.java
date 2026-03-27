@@ -1,19 +1,48 @@
-package dto;
+package org.example.dto;
 
-
-import org.antlr.v4.runtime.misc.NotNull;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 public class QuantityDTO {
 
-    @NotNull
-    private String operation;
+    @NotNull(message="Value cannot be null")
+    private Double value;
 
-    @NotNull
-    private Double operand1;
+    @NotEmpty(message="Unit cannot be empty")
+    private String unit;
 
-    private Double operand2;
+    @NotEmpty(message="Measurement type cannot be empty")
+    private String measurementType;
 
-    private Double result;
+    public QuantityDTO(){}
 
-    // getters & setters
+    public QuantityDTO(Double value,String unit,String measurementType){
+        this.value=value;
+        this.unit=unit;
+        this.measurementType=measurementType;
+    }
+
+    public Double getValue(){
+        return value;
+    }
+
+    public void setValue(Double value){
+        this.value=value;
+    }
+
+    public String getUnit(){
+        return unit;
+    }
+
+    public void setUnit(String unit){
+        this.unit=unit;
+    }
+
+    public String getMeasurementType(){
+        return measurementType;
+    }
+
+    public void setMeasurementType(String measurementType){
+        this.measurementType=measurementType;
+    }
 }
