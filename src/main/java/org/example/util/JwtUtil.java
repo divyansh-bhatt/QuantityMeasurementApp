@@ -2,6 +2,7 @@ package org.example.util;
 
 import io.jsonwebtoken.Jwts;
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 import org.springframework.stereotype.Component;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,7 +20,8 @@ public class JwtUtil {
     private long expiration;
 
     private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
+        byte[] keyBytes = Base64.getDecoder().decode(secret);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateToken(String email) {
