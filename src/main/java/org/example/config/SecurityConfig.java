@@ -51,7 +51,7 @@ public class SecurityConfig {
                             String email = oAuth2User.getAttribute("email");
                             String token = jwtUtil.generateToken(email);
                             response.setContentType("application/json");
-                            response.getWriter().write("{\"token\":\"" + token + "\"}");
+                            response.getWriter().write("{\"token\":\"" + token + "\"}") ;
                         })
                 );
 
