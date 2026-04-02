@@ -7,6 +7,7 @@ import org.example.service.CustomOAuth2UserService;
 import org.example.service.CustomUserDetailsService;
 import org.example.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -42,8 +43,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/api/v1/auth/**", "/h2-console/**").permitAll()
-                        .anyRequest().authenticated()            // 🔒 /home + all quantity endpoints
+                        .anyRequest().authenticated()            //  /home + all quantity endpoints
                 )
                 .headers(h -> h.frameOptions(f -> f.disable())) // needed for H2 console
                 .exceptionHandling(ex -> ex
