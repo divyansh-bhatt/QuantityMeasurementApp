@@ -15,10 +15,6 @@ public class QuantityMeasurementController {
     @Autowired
     private IQuantityMeasurementService service;
 
-    @GetMapping("/home")
-    public String home(){
-        return "App Started";
-    }
     @PostMapping("/compare")
     public boolean compare(@RequestBody QuantityDTO[] quantities){
         return service.compare(quantities[0],quantities[1]);
@@ -35,7 +31,6 @@ public class QuantityMeasurementController {
         return service.add(quantities[0],quantities[1]);
     }
 
-    @PostMapping("/subtract")
     public QuantityDTO subtract(@RequestBody QuantityDTO[] quantities){
         return service.subtract(quantities[0],quantities[1]);
     }
